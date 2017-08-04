@@ -247,8 +247,8 @@ Indexing ``ArrayField``
 
 At present using :attr:`~django.db.models.Field.db_index` will create a
 ``btree`` index. This does not offer particularly significant help to querying.
-A more useful index is a ``GIN`` index, which you should create using a
-:class:`~django.db.migrations.operations.RunSQL` operation.
+A more useful index is a ``GIN`` index, which you should create using 
+:class:`~django.contrib.postgres.indexes.GinIndex`.
 
 ``CIText`` fields
 =================
@@ -317,6 +317,7 @@ lookups available for ``HStoreField``.
 We will use the following example model::
 
     from django.contrib.postgres.fields import HStoreField
+    from django.contrib.postgres.indexes import GinIndex
     from django.db import models
 
     class Dog(models.Model):
@@ -325,6 +326,11 @@ We will use the following example model::
 
         def __str__(self):  # __unicode__ on Python 2
             return self.name
+
+	class Meta:
+            indexes = [
+                GinIndex(fields=['data'])
+            ]
 
 .. fieldlookup:: hstorefield.key
 
@@ -525,6 +531,7 @@ Querying ``JSONField``
 We will use the following example model::
 
     from django.contrib.postgres.fields import JSONField
+    from django.contrib.postgres.indexes import GinIndex
     from django.db import models
 
     class Dog(models.Model):
@@ -533,6 +540,11 @@ We will use the following example model::
 
         def __str__(self):  # __unicode__ on Python 2
             return self.name
+
+	class Meta:
+            indexes = [
+                GinIndex(fields=['data'])
+            ]
 
 .. fieldlookup:: jsonfield.key
 
